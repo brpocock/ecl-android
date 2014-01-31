@@ -13,3 +13,4 @@ __MACOSX
 *.nexe
 *.d
 *.nmf
+android/HelloEcl/bin/
