@@ -7,12 +7,12 @@ ifeq ($(UNAME),Darwin)
 TARGETS+=iPhoneOS iPhoneSimulator
 endif
 
-ifneq ($(ANDROID_NDK_ROOT),"")
+ifneq ($(ANDROID_NDK_ROOT),)
 TARGETS+=android androidx86
 endif
 
-ifneq ($(NACL_SDK_ROOT),"")
-TARGETS+=nacl32 nacl64
+ifneq ($(NACL_SDK_ROOT),)
+TARGETS+=nacl_x86_32_glibc nacl_x86_64_glibc nacl_x86_32_newlib nacl_x86_64_newlib
 NACL_SDK_VER:=$(shell basename "$(NACL_SDK_ROOT)" | cut -d '_' -f2)
 NACL_SDK_VERSION_GT_25:=$(shell expr $(NACL_SDK_VER) \>= 25)
 ifeq "$(NACL_SDK_VERSION_GT_25)" "1"
@@ -30,8 +30,8 @@ UNAME:=$(shell uname)
 
 all: $(TARGETS_ECL) $(TARGETS_GMP) $(TARGETS_ATOMIC) $(TARGETS_GMP)
 
-update: update-modules patch-ecl patch-mpir patch-bdwgc patch-cffi copy-slime
-	echo "ECL directory patched for android"
+update: update-modules patch-ecl patch-mpir patch-atomic patch-bdwgc patch-cffi copy-slime
+	echo "ECL directory patched for android/iOS/NaCL"
 
 update-modules:
 	git submodule init
@@ -53,6 +53,9 @@ patch-bdwgc:
 	cd bdwgc && git clean -dxf && git checkout HEAD . && for i in ../patches/bdwgc/*.patch; do patch -p1 < $$i; done
 	cp -f config.sub config.guess nacl/libgc/
 
+patch-atomic:
+	cd libatomic_ops && git clean -dxf && git checkout HEAD . && for i in ../patches/libatomic_ops/*.patch; do patch -p1 < $$i; done
+
 copy-slime:
 	-mkdir -p android/HelloEcl/assets/lisp/slime/contrib/
 	cp slime/*.lisp android/HelloEcl/assets/lisp/slime/
@@ -66,15 +69,9 @@ iPhoneOS: iPhoneOS.ecl
 
 ios: iPhoneUniversal.ecl
 
-nacl: nacl32.ecl nacl64.ecl
+nacl: nacl_x86_32_glibc.ecl nacl_x86_64_glibc.ecl
 
-nacl32.ecl: hostnothreads.ecl
-
-nacl64.ecl: hostnothreads.ecl
-
-pnacl: pnacl.ecl
-
-pnacl.ecl: hostnothreads.ecl
+nacl_x86_32_glibc.ecl nacl_x86_64_glibc.ecl nacl_x86_32_newlib.ecl nacl_x86_64_newlib.ecl pnacl: hostnothreads.ecl
 
 iPhoneUniversal.ecl: iPhoneOS iPhoneSimulator
 	-rm -rf $(ECL_INSTALL_ROOT_DIR)/iPhoneUniversal
@@ -117,7 +114,7 @@ iPhoneOS.ecl iPhoneSimulator.ecl android.ecl androidx86.ecl : host.ecl
 
 	touch $@
 
-pnacl.atomic:
+nacl_x86_32_glibc.atomic nacl_x86_64_glibc.atomic nacl_x86_32_newlib.atomic nacl_x86_64_newlib.atomic pnacl.atomic:
 	touch $@
 
 clean:
