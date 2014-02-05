@@ -1,4 +1,6 @@
-ECL_INSTALL_ROOT_DIR=./local-install
+ECL_INSTALL_ROOT_DIR=../../../build/ecl-android/buildroot
+
+BUILDROOT=../../../build/ecl-android/work
 
 TARGETS:=host64 host hostnothreads host64nothreads
 TARGET_LIST:=
@@ -88,29 +90,29 @@ iPhoneOS.ecl iPhoneSimulator.ecl android.ecl androidx86.ecl : host.ecl
 
 
 %.ecl: %.gmp %.bdwgc
-	-rm -rf build/$(@:.ecl=)/ecl
+	-rm -rf $(BUILDROOT)/$(@:.ecl=)/ecl
 	./configure ecl $(@:.ecl=)
-	cd build/$(@:.ecl=)/ecl && make all install
+	cd $(BUILDROOT)/$(@:.ecl=)/ecl && make all install
 	touch $@
 
 %.gmp:
-	-rm -rf build/$(@:.gmp=)/mpir
+	-rm -rf $(BUILDROOT)/$(@:.gmp=)/mpir
 	./configure mpir $(@:.gmp=)
-	cd build/$(@:.gmp=)/mpir && make all install
+	cd $(BUILDROOT)/$(@:.gmp=)/mpir && make all install
 
 	touch $@
 
 %.atomic:
-	-rm -rf build/$(@:.atomic=)/libatomic_ops
+	-rm -rf $(BUILDROOT)/$(@:.atomic=)/libatomic_ops
 	./configure libatomic_ops $(@:.atomic=)
-	cd build/$(@:.atomic=)/libatomic_ops && make all install
+	cd $(BUILDROOT)/$(@:.atomic=)/libatomic_ops && make all install
 
 	touch $@
 
 %.bdwgc: %.atomic
-	-rm -rf build/$(@:.bdwgc=)/bdwgc
+	-rm -rf $(BUILDROOT)/$(@:.bdwgc=)/bdwgc
 	./configure bdwgc $(@:.bdwgc=)
-	cd build/$(@:.bdwgc=)/bdwgc && make all install
+	cd $(BUILDROOT)/$(@:.bdwgc=)/bdwgc && make all install
 
 	touch $@
 
