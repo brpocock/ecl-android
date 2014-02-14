@@ -16,7 +16,7 @@ platform=$2
 
 PROJECT_ROOT=$(cd $(dirname ${0}) && pwd -P)
 
-ECL_INSTALL_ROOT_DIR=$PROJECT_ROOT/../../../build/ecl-android/buildroot
+ECL_INSTALL_ROOT_DIR=$PROJECT_ROOT/../../../../build/ecl-android/buildroot
 PROJECT_INSTALL_DIR=$ECL_INSTALL_ROOT_DIR/$platform
 export PKG_CONFIG_PATH=$PROJECT_INSTALL_DIR/lib/pkgconfig
 
@@ -31,7 +31,7 @@ esac
 cross_compiler_platform=host
 host_platform=$($PROJECT_ROOT/config.guess)
 
-builddir=$PROJECT_ROOT/../../../build/ecl-android/work/$platform/$project
+builddir=$PROJECT_ROOT/../../../../build/ecl-android/work/$platform/$project
 
 if [ ! -d ${builddir} ] ; then
     echo Creating directory "\`${builddir}'"

@@ -1,6 +1,6 @@
-ECL_INSTALL_ROOT_DIR=../../../build/ecl-android/buildroot
+ECL_INSTALL_ROOT_DIR=../../../../build/ecl-android/buildroot
 
-BUILDROOT=../../../build/ecl-android/work
+BUILDROOT=../../../../build/ecl-android/work
 
 TARGETS:=host64 host hostnothreads host64nothreads
 TARGET_LIST:=
