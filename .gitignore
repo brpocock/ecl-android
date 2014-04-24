@@ -18,3 +18,4 @@ host64.gmp
 host64nothreads.gmp
 host.gmp
 hostnothreads.gmp
+android/HelloEcl/gen/
